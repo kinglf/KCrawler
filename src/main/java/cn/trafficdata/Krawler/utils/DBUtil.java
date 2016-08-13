@@ -1,6 +1,6 @@
 package cn.trafficdata.Krawler.utils;
 
-import cn.trafficdata.Krawler.SerializableModel.Page_Serializable;
+import edu.uci.ics.crawler4j.crawler.Page;
 import redis.clients.jedis.Jedis;
 
 /**
@@ -10,7 +10,7 @@ public class DBUtil {
 
     private static String tableNameForPage="pageList";
     private static String ip="127.0.0.1";
-    private static int port=6699;
+    private static int port=6379;
     private static Jedis jedis=null;
     public static Jedis getRedis(){
         if(jedis==null||!jedis.isConnected()){
@@ -34,9 +34,11 @@ public class DBUtil {
     public static void setPort(int port) {
         DBUtil.port = port;
     }
-    public static void savePage(Page_Serializable page_serializable) throws Exception{
-        Jedis jedis=getRedis();
+    public static void savePage(Page page_serializable) throws Exception{
+        Jedis redis=getRedis();
         String url=page_serializable.getWebURL().getURL();
-        jedis.set(MD5Util.MD5(url).getBytes(), SerializeUtil.serialize(page_serializable));
+        redis.set(MD5Util.MD5(url).getBytes(), SerializeUtil.serialize(page_serializable));//将page转为字节数组流时会报空指针异常
+
     }
+
 }

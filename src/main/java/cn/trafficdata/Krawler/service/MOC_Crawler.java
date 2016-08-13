@@ -53,7 +53,8 @@ public class MOC_Crawler extends DocumentUtils implements ProcessDao {
         content=content.replaceAll("<p.*?>","<p>");
         content=RegexUtil.fiterHtmlTag(content,"img");
         String title=titleEl.text();
-        System.out.println(title+"-------"+content);
+//        System.out.println(title+"-------"+content);
+        saveResult(title,content);
 
 
         return true;

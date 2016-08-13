@@ -3,14 +3,20 @@ package cn.trafficdata.Krawler.controller;
 
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
 import cn.trafficdata.Krawler.service.BaseCrawler;
+import cn.trafficdata.Krawler.utils.MD5Util;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
+import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.fetcher.PageFetcher;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.List;
 
 
 /**
@@ -39,15 +45,31 @@ public class CrawlerController {
         *
         *
         * */
-        logger.info("test");
-        System.out.println("asdasd");
-//        controller.start(M18Crawler.class, numberOfCrawlers);
+
 
 
 
         CrawlController controller=getDefaultCrawlController();
         loadTasks(controller);
         controller.start(BaseCrawler.class,1);
+
+
+        //保存
+//        List<Object> crawlersLocalData = controller.getCrawlersLocalData();
+//        for(Object page:crawlersLocalData){
+//            if(page instanceof Page){
+//                Page rpage= (Page) page;
+//
+//                try {
+//                    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data/crawl/xuliehua/"+ MD5Util.MD5(((Page) page).getWebURL().getURL())));
+//                    oos.writeObject(page);
+//                    oos.flush();
+//                    oos.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
 
     }
     /*

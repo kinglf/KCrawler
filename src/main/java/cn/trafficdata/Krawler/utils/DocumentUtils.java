@@ -1,10 +1,10 @@
 package cn.trafficdata.Krawler.utils;
 
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
+import cn.trafficdata.Krawler.model.News;
 import cn.trafficdata.Krawler.service.BaseCrawler;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.parser.TextParseData;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -12,13 +12,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by Kinglf on 2016/8/13.
@@ -62,7 +57,6 @@ public class DocumentUtils {
     }
 
     public static void downImageByJsoup(String imgUrl,String fileName) throws IOException {
-        FileUtils.createDirectory(CrawlerConstants.IMAGE_FOLDER);
         fileName= CrawlerConstants.IMAGE_FOLDER+"/"+fileName;
         Connection.Response resultImageResponse = Jsoup.connect(imgUrl).ignoreContentType(true).execute();
         FileOutputStream out = (new FileOutputStream(new java.io.File(fileName)));
@@ -72,6 +66,10 @@ public class DocumentUtils {
     public static String getImageName(String url){
         String extName=FileUtils.getFileExtName(url);
         return MD5Util.MD5(url+System.currentTimeMillis()+ Math.random())+"."+extName;
+    }
+    public static void saveResult(String title,String content){
+        News news=new News(title,content);
+        DBUtil.getRedis().lpush(CrawlerConstants.RESULT_TABLE_NAME.getBytes(),SerializeUtil.serialize(news));
     }
 
 }

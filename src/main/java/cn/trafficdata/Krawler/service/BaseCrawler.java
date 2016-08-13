@@ -1,6 +1,5 @@
 package cn.trafficdata.Krawler.service;
 
-import cn.trafficdata.Krawler.SerializableModel.Page_Serializable;
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
 import cn.trafficdata.Krawler.utils.DBUtil;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -63,13 +62,12 @@ public class BaseCrawler extends WebCrawler {
 
     @Override
     public void visit(Page page) {
-//        System.out.println(page.getWebURL().getURL());
-//        Page_Serializable pagebak= (Page_Serializable) page;
-//        try{
-//            DBUtil.savePage(pagebak);
-//        }catch (Exception e){
-//            logger.error("数据库连接/存储错误,{}",e);
-//        }
+        try{
+//            getMyController().getCrawlersLocalData().add(page);
+            DBUtil.savePage(page);
+        }catch (Exception e){
+            logger.error("数据库连接/存储错误,{}",e);
+        }
         int detph=page.getWebURL().getDepth();
         String url=null;
         try{
