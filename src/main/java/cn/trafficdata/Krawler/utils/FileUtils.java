@@ -372,4 +372,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils{
             file.mkdirs();
         }
     }
+    public static String getFileExtName(String url){
+        return url.substring(url.lastIndexOf(".")+1,url.length());
+    }
 }
