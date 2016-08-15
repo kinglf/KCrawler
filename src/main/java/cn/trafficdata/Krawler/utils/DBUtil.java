@@ -8,7 +8,6 @@ import redis.clients.jedis.Jedis;
  */
 public class DBUtil {
 
-    private static String tableNameForPage="pageList";
     private static String ip="127.0.0.1";
     private static int port=6379;
     private static Jedis jedis=null;

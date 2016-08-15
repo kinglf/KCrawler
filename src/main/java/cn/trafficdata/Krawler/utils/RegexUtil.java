@@ -15,6 +15,8 @@ public class RegexUtil {
 
     private final static String regxpForImaTagSrcAttrib = "src=\"([^\"]+)\""; // 找出IMG标签的SRC属性
 
+    private final static String regexDate="\\d{4}-\\d{2}-\\d{2}";
+
     /**
      *
      */
@@ -189,6 +191,15 @@ public class RegexUtil {
         }
         matcherForTag.appendTail(sb);
         return sb.toString();
+    }
+    public static String filterDate(String str){
+        Pattern pattern = Pattern.compile(regexDate);
+        Matcher matcher = pattern.matcher(str);
+        boolean result1 = matcher.find();
+        while (result1) {
+           return matcher.group(0);
+        }
+        return null;
     }
 
 }

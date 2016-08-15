@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-4-25 13:26:56 by Hibernate Tools 3.5.0.Final -->
+<hibernate-mapping>
+    <class name="cn.trafficdata.Krawler.model.News" table="basenews">
+        <id name="id" type="int">
+            <column name="ID"/>
+            <generator class="native"/>
+        </id>
+        <property name="title" type="java.lang.String">
+            <column name="TITLE"/>
+        </property>
+        <property name="thumbnail" type="java.lang.String">
+            <column name="THUMBNAIL"/>
+        </property>
+        <property name="content" type="text">
+            <column name="CONTENT"/>
+        </property>
+        <property name="author" type="java.lang.String">
+            <column name="AUTHOR"/>
+        </property>
+        <property name="datetime" type="java.lang.String">
+            <column name="DATETIME"/>
+        </property>
+        <property name="source" type="java.lang.String">
+            <column name="SOURCE"/>
+        </property>
+        <property name="jianjie" type="java.lang.String">
+            <column name="JIANJIE"/>
+        </property>
+        <property name="key" type="java.lang.String">
+            <column name="KEYWORDS"/>
+        </property>
+        <property name="url" type="java.lang.String">
+            <column name="URL"/>
+        </property>
+    </class>
+</hibernate-mapping>
+
+

@@ -5,6 +5,8 @@ import cn.trafficdata.Krawler.model.News;
 import cn.trafficdata.Krawler.service.BaseCrawler;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -44,7 +46,7 @@ public class DocumentUtils {
             if(el.hasAttr("src")){
                 String imgUrl=el.attr("abs:src");
                 String imgName=getImageName(imgUrl);
-                el.html("[trafficdataImg src=\""+imgName+"\"]trafficdataImg");
+                el.html("[img src=\""+imgName+"\"]");
                 try{
                     downImageByJsoup(imgUrl,imgName);
                 }catch (IOException e){
@@ -67,9 +69,26 @@ public class DocumentUtils {
         String extName=FileUtils.getFileExtName(url);
         return MD5Util.MD5(url+System.currentTimeMillis()+ Math.random())+"."+extName;
     }
-    public static void saveResult(String title,String content){
-        News news=new News(title,content);
-        DBUtil.getRedis().lpush(CrawlerConstants.RESULT_TABLE_NAME.getBytes(),SerializeUtil.serialize(news));
+    public static void saveResult(News news){
+        Session session=null;
+        try{
+            session=HibernateUtil.getSession();
+            session.beginTransaction();
+            session.save(news);
+            session.getTransaction().commit();
+            logger.info("链接[{}]的数据存储成功.",news.getUrl());
+        }catch (HibernateException e){
+            logger.error("[{}]没有被存储,错误内容为[{}]",news.toString(),e);
+            if(session!=null){
+                session.getTransaction().rollback();
+            }
+        }finally {
+            if(session!=null){
+                session.close();
+            }
+        }
+
     }
+
 
 }
