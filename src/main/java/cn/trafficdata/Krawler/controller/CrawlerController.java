@@ -81,6 +81,7 @@ public class CrawlerController {
 //        controller.addSeed("http://www.moc.gov.cn/jiaotongyaowen/",-1);
         controller.addSeed("http://www.zgjtb.com/node_142.htm",-1);
         new TaskThread(controller);
+
     }
 
     /*
@@ -132,6 +133,7 @@ class TaskThread implements Runnable{
                 for(String task:taskList){
                     controller.addSeed(task,-1);
                     logger.info("系统得到任务并装载{}",task);
+                    //暂未对任务进行标记
                 }
             } catch (SQLException e) {
                 logger.error("数据库连接错误{}",e);

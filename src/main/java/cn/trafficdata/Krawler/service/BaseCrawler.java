@@ -64,7 +64,7 @@ public class BaseCrawler extends WebCrawler {
     public void visit(Page page) {
         try{
 //            getMyController().getCrawlersLocalData().add(page);
-            DBUtil.savePage(page);
+//            DBUtil.savePage(page);
         }catch (Exception e){
             logger.error("数据库连接/存储错误,{}",e);
         }

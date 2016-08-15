@@ -22,11 +22,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="KCrawler" />
+        <module name="TaskShell" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="KCrawler" target="1.5" />
+      <module name="TaskShell" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

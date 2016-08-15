@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/KCrawler.iml" filepath="$PROJECT_DIR$/.idea/KCrawler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TaskShell/TaskShell.iml" filepath="$PROJECT_DIR$/TaskShell/TaskShell.iml" />
     </modules>
   </component>
 </project>

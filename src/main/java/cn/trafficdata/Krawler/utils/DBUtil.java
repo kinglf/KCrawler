@@ -3,6 +3,10 @@ package cn.trafficdata.Krawler.utils;
 import edu.uci.ics.crawler4j.crawler.Page;
 import redis.clients.jedis.Jedis;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 /**
  * Created by Kinglf on 2016/8/12.
  */
@@ -18,26 +22,34 @@ public class DBUtil {
         return jedis;
     }
 
-    public static String getIp() {
-        return ip;
-    }
-
-    public static void setIp(String ip) {
-        DBUtil.ip = ip;
-    }
-
-    public static int getPort() {
-        return port;
-    }
-
-    public static void setPort(int port) {
-        DBUtil.port = port;
-    }
     public static void savePage(Page page_serializable) throws Exception{
         Jedis redis=getRedis();
         String url=page_serializable.getWebURL().getURL();
         redis.set(MD5Util.MD5(url).getBytes(), SerializeUtil.serialize(page_serializable));//将page转为字节数组流时会报空指针异常
 
     }
+
+    /**
+     * mysql链接方式,主要用作task加载用
+     */
+    private static String sqlUrl="";
+    private static String username="";
+    private static String password="";
+    static {
+        try
+        {
+            Class.forName("com.mysql.jdbc.Driver");
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new ExceptionInInitializerError(e);
+        }
+    }
+    public static Connection getConnection()
+            throws SQLException
+    {
+        return DriverManager.getConnection(sqlUrl, username, password);
+    }
+
 
 }
