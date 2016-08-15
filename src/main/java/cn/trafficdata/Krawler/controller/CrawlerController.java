@@ -3,6 +3,7 @@ package cn.trafficdata.Krawler.controller;
 
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
 import cn.trafficdata.Krawler.service.BaseCrawler;
+import cn.trafficdata.Krawler.service.TaskServices;
 import cn.trafficdata.Krawler.utils.MD5Util;
 import edu.uci.ics.crawler4j.crawler.CrawlConfig;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
@@ -16,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,7 +27,6 @@ import java.util.List;
  */
 public class CrawlerController {
     private static Logger logger= LoggerFactory.getLogger(CrawlerController.class);
-
     public static void main(String[] args) {
         /*   未考虑验证码和屏蔽方案
         * 1.加载任务
@@ -76,7 +78,9 @@ public class CrawlerController {
     * 加载任务
     * */
     private static void loadTasks(CrawlController controller){
-        controller.addSeed("http://www.moc.gov.cn/jiaotongyaowen/",-1);
+//        controller.addSeed("http://www.moc.gov.cn/jiaotongyaowen/",-1);
+        controller.addSeed("http://www.zgjtb.com/node_142.htm",-1);
+        new TaskThread(controller);
     }
 
     /*
@@ -113,4 +117,33 @@ public class CrawlerController {
 
 
 
+}
+class TaskThread implements Runnable{
+    private static Logger logger=LoggerFactory.getLogger(TaskThread.class);
+    private static CrawlController controller;
+    public TaskThread(CrawlController controller){
+        this.controller=controller;
+        new Thread(this).start();
+    }
+    public void run() {
+        while(true){
+            try {
+                List<String> taskList = TaskServices.loadTasks();
+                for(String task:taskList){
+                    controller.addSeed(task,-1);
+                    logger.info("系统得到任务并装载{}",task);
+                }
+            } catch (SQLException e) {
+                logger.error("数据库连接错误{}",e);
+            }
+
+
+            try {
+                Thread.sleep(10000);
+                logger.info("没有找到任务,间隔10秒钟后重试");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
