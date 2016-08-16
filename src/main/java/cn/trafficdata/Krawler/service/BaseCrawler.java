@@ -201,16 +201,13 @@ public class BaseCrawler extends WebCrawler {
             }
             int maxCrawlDepth=getMyController().getConfig().getMaxDepthOfCrawling();
             if((maxCrawlDepth==-1)||(page.getWebURL().getDepth()<maxCrawlDepth)) {
-                if (shouldVisit(page, webURL)) {
                     if (getMyController().getRobotstxtServer().allows(webURL)) {
                         webURL.setDocid(getMyController().getDocIdServer().getNewDocID(webURL.getURL()));
                         toSchedule.add(webURL);
                     } else {
                         logger.debug("目标站的robot.txt不允许访问此链接{}", webURL.getURL());
                     }
-                } else {
-                    logger.debug("设置的ShouldVisit不允许访问此链接-{}", webURL.getURL());
-                }
+
             }
         }
 
