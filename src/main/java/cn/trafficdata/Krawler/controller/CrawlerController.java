@@ -82,7 +82,8 @@ public class CrawlerController {
 //        controller.addSeed("http://www.zgjtb.com/node_142.htm",-1);
 //        controller.addSeed("http://www.jiaotongjie.com/hotnews/index_12.html",-1);
 //        controller.addSeed("http://money.163.com/special/002526O5/transport.html",-1);
-        controller.addSeed("http://www.jiemian.com/lists/30.html",-1);
+//        controller.addSeed("http://www.jiemian.com/lists/30.html",-1);//此链接不准,用下方json格式链接,总计为89页
+        controller.addSeed("http://a.jiemian.com/index.php?m=lists&a=ajaxlist&cid=30&callback=jQuery110204512597946450114_1471343786945&page=2&_=1471343786946",-1);
 //        new TaskThread(controller);
 
     }

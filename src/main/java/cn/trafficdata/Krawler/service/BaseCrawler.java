@@ -56,7 +56,8 @@ public class BaseCrawler extends WebCrawler {
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String href=url.getURL().toLowerCase();
-        return!FILTERS.matcher(href).matches();
+        Boolean b=!FILTERS.matcher(href).matches();
+        return false;
     }
 
 

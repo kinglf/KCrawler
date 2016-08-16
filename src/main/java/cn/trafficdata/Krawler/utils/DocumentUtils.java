@@ -72,7 +72,7 @@ public class DocumentUtils {
 
     public static void downImageByJsoup(String imgUrl,String fileName) throws IOException {
         fileName= CrawlerConstants.IMAGE_FOLDER+"/"+fileName;
-        Connection.Response resultImageResponse = Jsoup.connect(imgUrl).ignoreContentType(true).execute();
+        Connection.Response resultImageResponse = Jsoup.connect(imgUrl).ignoreContentType(true).timeout(10000).execute();
         FileOutputStream out = (new FileOutputStream(new java.io.File(fileName)));
         out.write(resultImageResponse.bodyAsBytes());
     }

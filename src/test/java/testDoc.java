@@ -9,5 +9,8 @@ import org.jsoup.nodes.Document;
 public class testDoc {
     public static void main(String[] args) {
         Document doc= BaseCrawler.getDoc("http://a.jiemian.com/index.php?m=lists&a=ajaxlist&cid=30&page=1&_=1471335720017",true,5000);
+//        String html=doc.
+//        System.out.println(html);
+//        String jsonStr=html.substring(html.indexOf("(")+1,html-)
     }
 }
