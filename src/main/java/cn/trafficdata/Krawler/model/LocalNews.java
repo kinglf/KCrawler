@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by Kinglf on 2016/8/13.
  */
-public class News implements Serializable{
+public class LocalNews implements Serializable{
     private static final long serialVersionUID = 8291745614934779794L;
 
     public int getId() {

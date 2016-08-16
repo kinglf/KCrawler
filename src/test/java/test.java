@@ -1,13 +1,9 @@
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
-import cn.trafficdata.Krawler.model.News;
+import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.utils.DBUtil;
 import cn.trafficdata.Krawler.utils.SerializeUtil;
-import edu.uci.ics.crawler4j.crawler.Page;
-import redis.clients.jedis.Jedis;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Kinglf on 2016/8/12.
@@ -30,8 +26,8 @@ public class test {
         List<byte[]> lrange = DBUtil.getRedis().lrange(CrawlerConstants.RESULT_TABLE_NAME.getBytes(), 0, -1);
         for(byte[] bytes:lrange){
             Object unserialize = SerializeUtil.unserialize(bytes);
-            if(unserialize instanceof News){
-                News news= (News) unserialize;
+            if(unserialize instanceof LocalNews){
+                LocalNews news= (LocalNews) unserialize;
                 System.out.println(news.getTitle()+"---"+news.getContent());
             }
         }

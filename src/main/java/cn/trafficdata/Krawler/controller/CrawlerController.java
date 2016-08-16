@@ -79,8 +79,11 @@ public class CrawlerController {
     * */
     private static void loadTasks(CrawlController controller){
 //        controller.addSeed("http://www.moc.gov.cn/jiaotongyaowen/",-1);
-        controller.addSeed("http://www.zgjtb.com/node_142.htm",-1);
-        new TaskThread(controller);
+//        controller.addSeed("http://www.zgjtb.com/node_142.htm",-1);
+//        controller.addSeed("http://www.jiaotongjie.com/hotnews/index_12.html",-1);
+//        controller.addSeed("http://money.163.com/special/002526O5/transport.html",-1);
+        controller.addSeed("http://www.jiemian.com/lists/30.html",-1);
+//        new TaskThread(controller);
 
     }
 
@@ -121,6 +124,7 @@ public class CrawlerController {
 }
 class TaskThread implements Runnable{
     private static Logger logger=LoggerFactory.getLogger(TaskThread.class);
+
     private static CrawlController controller;
     public TaskThread(CrawlController controller){
         this.controller=controller;

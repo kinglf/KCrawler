@@ -1,4 +1,3 @@
-import cn.trafficdata.Krawler.model.News;
 import cn.trafficdata.Krawler.utils.RegexUtil;
 import net.sf.json.JSONObject;
 import org.jsoup.Jsoup;

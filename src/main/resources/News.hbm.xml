@@ -3,7 +3,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <!-- Generated 2016-4-25 13:26:56 by Hibernate Tools 3.5.0.Final -->
 <hibernate-mapping>
-    <class name="cn.trafficdata.Krawler.model.News" table="basenews">
+    <class name="cn.trafficdata.Krawler.model.LocalNews" table="basenews">
         <id name="id" type="int">
             <column name="ID"/>
             <generator class="native"/>

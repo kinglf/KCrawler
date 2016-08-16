@@ -1,6 +1,8 @@
 package cn.trafficdata.Krawler.service;
 
-import cn.trafficdata.Krawler.model.News;
+import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
+import cn.edu.hfut.dmic.contentextractor.News;
+import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.utils.DocumentUtils;
 import cn.trafficdata.Krawler.utils.RegexUtil;
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -23,10 +25,9 @@ public class MOC_Crawler extends DocumentUtils implements ProcessDao {
         doc.setBaseUri(page.getWebURL().getURL());
         try{
         Elements linkEls=doc.select("div[class=dfxw_main_bottom] li");
-            System.out.println("发现连接"+linkEls.size());
         for(Element linkEl:linkEls){
             String url=linkEl.select("a").attr("abs:href");
-            System.out.println("发现连接"+url);
+            logger.info("发现新链接:{}",url);
             try {
                 WebURL webURL = new WebURL();
                 webURL.setURL(url);
@@ -44,30 +45,30 @@ public class MOC_Crawler extends DocumentUtils implements ProcessDao {
     }
 
     public boolean processDoc(Page page) {
-        Document doc=page2Doc(page);
-        Element titleEl=doc.select("h3").first();
-        String sourceAtime=doc.select("h4").first().text();
 
-        Element docEl=doc.select("div[class^=zcjdxl_main_top]").first();
-        //先处理图片,然后过滤标签
-        docEl=processImage(docEl);
-        String content=RegexUtil.filterScript(docEl.html());
-        content=content.replaceAll("<strong.*?>","[strong]");
-        content=content.replace("</strong>","[/strong]");
-        content= RegexUtil.filterHtml(content).replace("\r","").replace("\n","");
-        content=content.replaceAll("<p.*?>","<p>").replace("　","");
-        content=RegexUtil.fiterHtmlTag(content,"img").replace(" ","");
-        String title=titleEl.text();
-        String time=RegexUtil.filterDate(sourceAtime);
-        int len=sourceAtime.indexOf(time);
-        String source=sourceAtime.substring(3,len).replace(" ","");
-        News news=new News();
+        Document doc=page2Doc(page);
+        News pluginNews=null;
+        try {
+            pluginNews= ContentExtractor.getNewsByDoc(doc);
+        } catch (Exception e) {
+            logger.error("ContentExtractor插件调用错误,页面url-{},错误-{}",page.getWebURL().getURL(),e);
+            return false;
+        }
+        LocalNews news=new LocalNews();
+        String title=pluginNews.getTitle();
+        String sourceAtime=doc.select("h4").first().text();
         news.setTitle(title);
+        news=formatSource(sourceAtime,news);
+        if(news.getDatetime()==null){
+            news.setDatetime(pluginNews.getTime());
+        }
+        Element imgElement=pluginNews.getContentElement();
+        imgElement=processImage(imgElement);
+        String content=formatContent(imgElement.html());
         news.setContent(content);
-        news.setSource(source);
-        news.setDatetime(time);
         news.setUrl(page.getWebURL().getURL());
         saveResult(news);
+       logger.info("数据获取成功,{}",news.toString());
         return true;
     }
 }

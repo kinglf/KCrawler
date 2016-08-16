@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * Created by Kinglf on 2016/8/13.
  */
 public class RegexUtil {
-    private final static String regxpForHtml = "<([^>|^p]*)>"; // 过滤所有以<开头以>结尾的标签
+    private final static String regxpForHtml = "<([^>]*)>"; // 过滤所有以<开头以>结尾的标签
 
     private final static String regexpScript="<script\\b[^<]*(?:(?!<\\/script>)<[^<]*)*<\\/script>";
 
@@ -198,6 +198,15 @@ public class RegexUtil {
         boolean result1 = matcher.find();
         while (result1) {
            return matcher.group(0);
+        }
+        return null;
+    }
+    public static String filterStr(String str,String regex){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        boolean result1 = matcher.find();
+        while (result1) {
+            return matcher.group(0);
         }
         return null;
     }

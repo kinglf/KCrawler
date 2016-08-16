@@ -1,8 +1,9 @@
 package cn.trafficdata.Krawler.service;
 
-import cn.trafficdata.Krawler.model.News;
+import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
+import cn.edu.hfut.dmic.contentextractor.News;
+import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.utils.DocumentUtils;
-import cn.trafficdata.Krawler.utils.RegexUtil;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.url.WebURL;
 import org.jsoup.nodes.Document;
@@ -45,40 +46,29 @@ public class ZGJTB_Crawler extends DocumentUtils implements ProcessDao{
 
     public boolean processDoc(Page page) {
         Document doc=page2Doc(page);
-        String title=doc.select("div[class=t-title] h1").first().text();
-        String sourceAtime=doc.select("div[class=t-title] p").first().text();
-        String[] arr=sourceAtime.split(" ");
-        String source=null;
-        String time=null;
-        String author=null;
-        for(String str:arr){
-            if(str.contains("时间")){
-                time=RegexUtil.filterDate(str);
-            }else if(str.contains("来源")){
-                source=str.replace("来源","").replace("：","");
-            }else if(str.contains("作者")){
-                author=str.replace("作者","").replace("：","");
-            }
+        News pluginNews=null;
+        try {
+            pluginNews= ContentExtractor.getNewsByDoc(doc);
+        } catch (Exception e) {
+            logger.error("ContentExtractor插件调用错误,页面url-{},错误-{}",page.getWebURL().getURL(),e);
+            return false;
         }
-        Element docEl=doc.select("div[class=m]").first();
-        //先处理图片,然后过滤标签
-        docEl=processImage(docEl);
-        String content= RegexUtil.filterScript(docEl.html());
-        content=content.replaceAll("<!-.*?->","");
-        content=content.replaceAll("<strong.*?>","[strong]");
-        content=content.replace("</strong>","[/strong]");
-        content= RegexUtil.filterHtml(content).replace("\r","").replace("\n","");
-        content=content.replaceAll("<p.*?>","<p>").replace("　","");
-        content=RegexUtil.fiterHtmlTag(content,"img").replace(" ","");
-        News news=new News();
+        LocalNews news=new LocalNews();
+        String title=pluginNews.getTitle();
+        String sourceAtime=doc.select("div[class=t-title] p").first().text();
         news.setTitle(title);
+        news=formatSource(sourceAtime,news);
+        if(news.getDatetime()==null){
+            news.setDatetime(pluginNews.getTime());
+        }
+        Element imgElement=doc.select("div[class=m]").first();
+        imgElement=processImage(imgElement);
+        String content=formatContent(imgElement.html());
         news.setContent(content);
-        news.setSource(source);
-        news.setDatetime(time);
-        news.setAuthor(author);
         news.setUrl(page.getWebURL().getURL());
-//        saveResult(news);
+        saveResult(news);
         System.out.println(news.toString());
+
         return true;
     }
 }

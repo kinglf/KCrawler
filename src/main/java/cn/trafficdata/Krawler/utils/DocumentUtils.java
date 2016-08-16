@@ -1,10 +1,14 @@
 package cn.trafficdata.Krawler.utils;
 
+import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
+import cn.edu.hfut.dmic.contentextractor.News;
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
-import cn.trafficdata.Krawler.model.News;
+import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.service.BaseCrawler;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
+import edu.uci.ics.crawler4j.parser.TextParseData;
+import net.sf.json.JSONObject;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.jsoup.Connection;
@@ -30,16 +34,24 @@ public class DocumentUtils {
             doc = Jsoup.parse(html);
             doc.setBaseUri(page.getWebURL().getURL());
         }
+        if(page.getParseData() instanceof TextParseData){
+            TextParseData textParseData= (TextParseData) page.getParseData();
+            String html=textParseData.getTextContent();
+            JSONObject jsonObject=JSONObject.fromObject(html.substring(1,html.length()-1));
+            try{
+                doc=Jsoup.parse(jsonObject.getString("rst"));
+            }catch (NullPointerException ue){
+
+            }
+        }
         return doc;
     }
 
 
 
-    public static void main(String[] args) {
-       Document doc= BaseCrawler.getDoc("http://www.moc.gov.cn/jiaotongyaowen/201608/t20160811_2075161.html",true,5000);
-        processImage(doc);
 
-    }
+
+
     public static Element processImage(Element docEl){
         Elements els=docEl.select("img");
         for(Element el:els){
@@ -69,7 +81,7 @@ public class DocumentUtils {
         String extName=FileUtils.getFileExtName(url);
         return MD5Util.MD5(url+System.currentTimeMillis()+ Math.random())+"."+extName;
     }
-    public static void saveResult(News news){
+    public static void saveResult(LocalNews news){
         Session session=null;
         try{
             session=HibernateUtil.getSession();
@@ -87,8 +99,114 @@ public class DocumentUtils {
                 session.close();
             }
         }
-
     }
 
+    public static String formatContent(String content,String split){
+        // 此内容已将img标签更换为[img src=""]
+        //过滤script标签
+        content= RegexUtil.filterScript(content);
+        //过滤注释
+        content=content.replaceAll("<!-.*?->","");
+        //过滤加粗标签
+        content=content.replaceAll("<strong.*?>","[strong]");
+        content=content.replace("</strong>","[/strong]");
+        //去除文章里的所有html(不包括P)标签
+        content=content.replaceAll("<p.*?>","[p]");
+        content=content.replace("</p>","[/p]");
+        content= RegexUtil.filterHtml(content).replace("\r","").replace("\n","");
+        //再次过滤img标签
+        content=RegexUtil.fiterHtmlTag(content,"img").replace(" ","");
+        //过滤没用的标签
+        String regex="\\[p\\](&nbsp;)*\\[/p\\]";
+        content=content.replaceAll(regex,"").replace("&nbsp;","");
+        if(!content.contains("[p]")){
+            String[] arrs = content.split(split);
+            StringBuilder stringBuilder=new StringBuilder();
+            for(String arr:arrs){
+                if(!arr.contains(split)&&arr.length()>0){
+                    stringBuilder.append("[p]"+arr+"[/p]");
+                }
+            }
+            content= stringBuilder.toString();
+        }
+        return content.replace(split,"");
+        //得到完成的分段落的带strong、img的正文
+    }
+    public static String formatContent(String content){
+        return formatContent(content,"　");
+    }
+
+    /**
+     *
+     * @param sourceAtime
+     * @param news
+     * @param split
+     * @return
+     */
+    public static LocalNews formatSource(String sourceAtime,LocalNews news,String split){
+        String[] arr=sourceAtime.split(split);
+        String source=null;
+        String time=null;
+        String author=null;
+        for(String str:arr){
+            if(str.contains("时间")){
+                time= RegexUtil.filterDate(str);
+            }else if(str.contains("来源")){
+                source=str.replace("来源","").replace("：","");
+            }else if(str.contains("作者")){
+                author=str.replace("作者","").replace("：","");
+            }
+        }
+        news.setDatetime(time);
+        news.setSource(source);
+        news.setAuthor(author);
+        return news;
+    }
+
+    public static LocalNews formatSource(String sourceAtime,LocalNews news,String split,String shijian,String laiyuan,String zuozhe){
+        String[] arr=sourceAtime.split(split);
+        String source=null;
+        String time=null;
+        String author=null;
+        for(String str:arr){
+            if(str.contains(shijian)){
+                time= RegexUtil.filterDate(str);
+            }else if(str.contains(laiyuan)){
+                source=str.replace(laiyuan,"").replace("：","");
+            }else if(str.contains(zuozhe)){
+                author=str.replace(zuozhe,"").replace("：","");
+            }
+        }
+        news.setDatetime(time);
+        news.setSource(source);
+        news.setAuthor(author);
+        return news;
+    }
+
+    /**
+     *
+     * @param sourceAtime
+     * @param news
+     * @return
+     */
+    public static LocalNews formatSource(String sourceAtime,LocalNews news){
+        return formatSource(sourceAtime,news," ");
+    }
+    public static void main(String[] args) {
+//        Document doc= BaseCrawler.getDoc("http://www.moc.gov.cn/jiaotongyaowen/201608/t20160811_2075161.html",true,5000);
+//        System.out.println(processImage(doc.select("div[class^=zcjdxl_main_top]").first()).html());
+        try {
+            String url="http://www.jiemian.com/article/801374.html";
+            News newsByUrl = ContentExtractor.getNewsByUrl(url);
+
+            String html=newsByUrl.getContentElement().html();
+            html=formatContent(html);
+            System.out.println("AfterContent:"+html);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

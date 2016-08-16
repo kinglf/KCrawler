@@ -10,7 +10,7 @@
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
         <!-- 是否显示sql -->
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
         <!-- 链接编码 -->
         <property name="connection.characterEncoding">utf8</property>
         <!-- 会自动完成类到数据表的转换 -->
