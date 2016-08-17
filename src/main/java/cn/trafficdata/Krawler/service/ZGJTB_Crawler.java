@@ -24,7 +24,7 @@ public class ZGJTB_Crawler extends SuperCrawler{
     }
 
     protected LocalNews processVideo(LocalNews news, Document doc) {
-        return null;
+        return news;
     }
 
     protected Element getContentElement(Document doc) {

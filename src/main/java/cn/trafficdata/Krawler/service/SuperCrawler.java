@@ -20,12 +20,11 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
           public List<WebURL> pageListHandler(Page page) {
             List<WebURL> webURLs = new ArrayList<WebURL>();
             Document doc = page2Doc(page);
-            doc.setBaseUri(page.getWebURL().getURL());
             try {
                 //抽象方法获得链接
                 Elements linkEls=getLinkElements(doc);
                 for (Element linkEl : linkEls) {
-                    String url = linkEl.attr("abs:href");
+                    String url = linkEl.select("a").attr("abs:href");
                     logger.info("发现新链接:{}", url);
                     try {
                         WebURL webURL = new WebURL();
@@ -45,8 +44,6 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
 
 
     public boolean processDoc(Page page) {
-            String title=null;
-
             Document doc = page2Doc(page);
             News pluginNews = null;
             try {
