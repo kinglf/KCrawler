@@ -41,6 +41,10 @@ public class MOC_Crawler extends DocumentUtils implements ProcessDao {
             logger.error("列表页解析失败,{},{}",page.getWebURL().getURL(),e);
             e.printStackTrace();
         }
+        WebURL webURL = new WebURL();
+        webURL.setURL("http://www.moc.gov.cn/jiaotongyaowen/201608/W020160815730289674675.jpg");
+        webURL.setDepth((short) 2);
+        webURLs.add(webURL);
         return webURLs;
     }
 

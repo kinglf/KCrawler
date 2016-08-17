@@ -8,8 +8,7 @@ import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.service.BaseCrawler;
 import edu.uci.ics.crawler4j.crawler.Page;
 import edu.uci.ics.crawler4j.parser.HtmlParseData;
-import edu.uci.ics.crawler4j.parser.TextParseData;
-import net.sf.json.JSONObject;
+import edu.uci.ics.crawler4j.url.WebURL;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.jsoup.Connection;
@@ -22,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.regex.Pattern;
+
 
 /**
  * Created by Kinglf on 2016/8/13.
@@ -48,16 +48,23 @@ public class DocumentUtils {
         Elements els=docEl.select("img");
         for(Element el:els){
             if(el.hasAttr("src")){
-                String imgUrl=el.attr("abs:src");
+                String imgUrl=el.attr("abs:src").replace("/../","/");
                 if(!imgUrl.equals("")){
                     String imgName=getImageName(imgUrl);
                     el.html("[img src=\""+imgName+"\"]");
-                    try{
-                        downImageByJsoup(imgUrl,imgName);
-                    }catch (IOException e){
-                        logger.error("图片下载失败,请手动下载,文件名-{},连接-{}",imgName,imgUrl);
-                        e.printStackTrace();
-                    }
+
+                        //将图片增加到资源中
+                        int docId=CrawlerController.controller.getDocIdServer().getDocId(imgUrl);
+                        if(docId==-1){//未下载过
+                            WebURL webURL=new WebURL();
+                            webURL.setURL(imgUrl);
+                            webURL.setParentUrl(docEl.baseUri());
+                            webURL.setDocid(CrawlerController.controller.getDocIdServer().getNewDocID(imgUrl));
+                            webURL.setDepth((short) 2);//图片类型所在深度
+                            webURL.setParentDocid(CrawlerController.controller.getDocIdServer().getDocId(docEl.baseUri()));
+                            CrawlerController.controller.getFrontier().schedule(webURL);
+                        }
+
                 }
 
             }
@@ -79,7 +86,7 @@ public class DocumentUtils {
         if (!imgPatterns.matcher(extName).matches()) {
             extName="jpeg";
         }
-        String imgName=MD5Util.MD5(url+System.currentTimeMillis()+ Math.random())+"."+extName;
+        String imgName=MD5Util.MD5(url)+"."+extName;
         return imgName;
     }
     public static void saveResult(LocalNews news){
