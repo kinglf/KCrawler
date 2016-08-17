@@ -32,9 +32,9 @@ public class DBUtil {
     /**
      * mysql链接方式,主要用作task加载用
      */
-    private static String sqlUrl="";
-    private static String username="";
-    private static String password="";
+    private static String sqlUrl="jdbc:mysql://127.0.0.1:3306/crawler_zk?characterEncoding=UTF-8";
+    private static String username="root";
+    private static String password="1234";
     static {
         try
         {

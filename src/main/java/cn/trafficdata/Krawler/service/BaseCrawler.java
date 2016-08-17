@@ -89,6 +89,7 @@ public class BaseCrawler extends WebCrawler {
                     putWebURLs(page,toSchedule);//深度在接口/抽象的内容中获取   可以任意指定
                     break;
                 case 1://详情页
+
                     boolean valid=processer.processDoc(page);
                     if(!valid){
                         logger.error("网页解析出错-{}",page.getWebURL().getURL());
@@ -100,6 +101,25 @@ public class BaseCrawler extends WebCrawler {
             }
         } catch (ClassNotFoundException e) {
             logger.error("没有找到对应的类Class-{}",className);
+            processer=new SuperCrawler();
+            switch (detph){
+                case -1:
+                    System.out.println("进入-1");
+                    break;
+                case 0://列表页
+                    List<WebURL> toSchedule = processer.pageListHandler(page);
+                    putWebURLs(page,toSchedule);//深度在接口/抽象的内容中获取   可以任意指定
+                    break;
+                case 1://详情页
+                    boolean valid=processer.processDoc(page);
+                    if(!valid){
+                        logger.error("网页解析出错-{}",page.getWebURL().getURL());
+                    }
+                    break;
+                default:
+                    logger.debug("detph异常-{}",detph);
+                    break;
+            }
         } catch (InstantiationException e) {
             logger.error("{}",e);
         } catch (IllegalAccessException e) {

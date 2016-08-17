@@ -201,12 +201,24 @@ public class RegexUtil {
         }
         return null;
     }
-    public static String filterStr(String str,String regex){
+
+    /**
+     *
+     * @param str
+     * @param regex
+     * @param //是否为完整截取,false为完整,true为不完整
+     * @return
+     */
+    public static String filterStr(String str,String regex,boolean isWanZheng){
+        int type=0;
+        if(isWanZheng){
+            type=1;
+        }
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
         boolean result1 = matcher.find();
         while (result1) {
-            return matcher.group(0);
+            return matcher.group(type);
         }
         return null;
     }

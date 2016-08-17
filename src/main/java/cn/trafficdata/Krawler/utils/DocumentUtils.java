@@ -3,6 +3,7 @@ package cn.trafficdata.Krawler.utils;
 import cn.edu.hfut.dmic.contentextractor.ContentExtractor;
 import cn.edu.hfut.dmic.contentextractor.News;
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
+import cn.trafficdata.Krawler.controller.CrawlerController;
 import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.service.BaseCrawler;
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 /**
  * Created by Kinglf on 2016/8/13.
@@ -34,16 +36,6 @@ public class DocumentUtils {
             doc = Jsoup.parse(html);
             doc.setBaseUri(page.getWebURL().getURL());
         }
-        if(page.getParseData() instanceof TextParseData){
-            TextParseData textParseData= (TextParseData) page.getParseData();
-            String html=textParseData.getTextContent();
-            JSONObject jsonObject=JSONObject.fromObject(html.substring(1,html.length()-1));
-            try{
-                doc=Jsoup.parse(jsonObject.getString("rst"));
-            }catch (NullPointerException ue){
-
-            }
-        }
         return doc;
     }
 
@@ -57,20 +49,24 @@ public class DocumentUtils {
         for(Element el:els){
             if(el.hasAttr("src")){
                 String imgUrl=el.attr("abs:src");
-                String imgName=getImageName(imgUrl);
-                el.html("[img src=\""+imgName+"\"]");
-                try{
-                    downImageByJsoup(imgUrl,imgName);
-                }catch (IOException e){
-                    logger.error("图片下载失败,请手动下载,文件名-{},连接-{}",imgName,imgUrl);
-                    e.printStackTrace();
+                if(!imgUrl.equals("")){
+                    String imgName=getImageName(imgUrl);
+                    el.html("[img src=\""+imgName+"\"]");
+                    try{
+                        downImageByJsoup(imgUrl,imgName);
+                    }catch (IOException e){
+                        logger.error("图片下载失败,请手动下载,文件名-{},连接-{}",imgName,imgUrl);
+                        e.printStackTrace();
+                    }
                 }
+
             }
         }
         return docEl;
     }
 
     public static void downImageByJsoup(String imgUrl,String fileName) throws IOException {
+        imgUrl=imgUrl.replace("/../","/");
         fileName= CrawlerConstants.IMAGE_FOLDER+"/"+fileName;
         Connection.Response resultImageResponse = Jsoup.connect(imgUrl).ignoreContentType(true).timeout(10000).execute();
         FileOutputStream out = (new FileOutputStream(new java.io.File(fileName)));
@@ -79,16 +75,21 @@ public class DocumentUtils {
 
     public static String getImageName(String url){
         String extName=FileUtils.getFileExtName(url);
-        return MD5Util.MD5(url+System.currentTimeMillis()+ Math.random())+"."+extName;
+        Pattern imgPatterns = Pattern.compile(".*((bmp|gif|jpe?g|png|tiff?))$");
+        if (!imgPatterns.matcher(extName).matches()) {
+            extName="jpeg";
+        }
+        String imgName=MD5Util.MD5(url+System.currentTimeMillis()+ Math.random())+"."+extName;
+        return imgName;
     }
     public static void saveResult(LocalNews news){
         Session session=null;
         try{
             session=HibernateUtil.getSession();
             session.beginTransaction();
+            news.setFenlei(CrawlerController.isDoingName);
             session.save(news);
             session.getTransaction().commit();
-            logger.info("链接[{}]的数据存储成功.",news.getUrl());
         }catch (HibernateException e){
             logger.error("[{}]没有被存储,错误内容为[{}]",news.toString(),e);
             if(session!=null){
@@ -196,7 +197,7 @@ public class DocumentUtils {
 //        Document doc= BaseCrawler.getDoc("http://www.moc.gov.cn/jiaotongyaowen/201608/t20160811_2075161.html",true,5000);
 //        System.out.println(processImage(doc.select("div[class^=zcjdxl_main_top]").first()).html());
         try {
-            String url="http://www.jiemian.com/article/801374.html";
+            String url="http://www.bbaqw.com/wz/34040.htm";
             News newsByUrl = ContentExtractor.getNewsByUrl(url);
 
             String html=newsByUrl.getContentElement().html();

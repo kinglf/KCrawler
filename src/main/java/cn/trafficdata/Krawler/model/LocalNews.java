@@ -35,6 +35,16 @@ public class LocalNews implements Serializable{
     }
 
     private String title;//标题
+
+    public String getFenlei() {
+        return fenlei;
+    }
+
+    public void setFenlei(String fenlei) {
+        this.fenlei = fenlei;
+    }
+
+    private String fenlei;//分类
     private String thumbnail;//缩略图
     private String content;//新闻内容
     private String author;//作者
@@ -42,6 +52,62 @@ public class LocalNews implements Serializable{
     private String source;//来源
     private String jianjie;//简介
     private String key;//关键词以,号分割
+
+    public String getVideo_type() {
+        return video_type;
+    }
+
+    public void setVideo_type(String video_type) {
+        this.video_type = video_type;
+    }
+
+    public String getVideo_vid() {
+        return video_vid;
+    }
+
+    public void setVideo_vid(String video_vid) {
+        this.video_vid = video_vid;
+    }
+
+    public String getVideo_cid() {
+        return video_cid;
+    }
+
+    public void setVideo_cid(String video_cid) {
+        this.video_cid = video_cid;
+    }
+
+    public String getVideo_url() {
+        return video_url;
+    }
+
+    public void setVideo_url(String video_url) {
+        this.video_url = video_url;
+    }
+
+    public String getVideo_pic() {
+        return video_pic;
+    }
+
+    public void setVideo_pic(String video_pic) {
+        this.video_pic = video_pic;
+    }
+
+    public String getVideo_title() {
+        return video_title;
+    }
+
+    public void setVideo_title(String video_title) {
+        this.video_title = video_title;
+    }
+
+    private String video_type;//用来判断哪的视频
+    private String video_vid;//vid
+    private String video_cid;
+    private String video_url;
+    private String video_pic;
+    private String video_title;
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

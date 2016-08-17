@@ -27,7 +27,7 @@ public class CrawlerConstants {
         SITE_MAP.put("jiemian.com","JMA_Crawler");
         SITE_MAP.put("qq.com","QQ_Crawler");
         SITE_MAP.put("sohu.com","SOHU_Crawler");
-        SITE_MAP.put("c-cc.cn","C-CC_Crawler");
+        SITE_MAP.put("c-cc.cn","C_CC_Crawler");
         SITE_MAP.put("bbaqw.com","BBAQW_Crawler");
         SITE_MAP.put("chinarta.com","CHINARTA_Crawler");
         SITE_MAP.put("china.com","CHINA_Crawler");

@@ -8,9 +8,9 @@ import java.sql.SQLException;
  * Created by Kinglf on 2016/8/15.
  */
 public class DBUtils {
-    private static String url="jdbc:mysql://127.0.0.1:3306/crawler_zk?characterEncoding=UTF-8";
-    private static String username="root";
-    private static String password="1234";
+    public static String url="jdbc:mysql://127.0.0.1:3306/crawler_zk?characterEncoding=UTF-8";
+    public static String username="root";
+    public static String password="1234";
     static
     {
         try

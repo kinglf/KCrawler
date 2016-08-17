@@ -72,7 +72,7 @@ public class JMA_Crawler extends DocumentUtils implements ProcessDao {
         try{
             author=doc.select("div[class=article-info] p[class=info-s] span[class=author] a").first().text();
             time=doc.select("div[class=article-info] p[class=info-s] span[class=date]").first().text();
-            source= RegexUtil.filterStr(title,"【.*?】").replace("【","").replace("】","");
+            source= RegexUtil.filterStr(title,"【(.*?)】",true);
             title=title.replaceAll("【.*?】","");
         }catch (NullPointerException ue){
         }

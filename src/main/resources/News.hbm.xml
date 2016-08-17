@@ -35,6 +35,27 @@
         <property name="url" type="java.lang.String">
             <column name="URL"/>
         </property>
+        <property name="fenlei" type="java.lang.String">
+            <column name="FENLEI"/>
+        </property>
+        <property name="video_type" type="java.lang.String">
+            <column name="VIDEO_TYPE"/>
+        </property>
+        <property name="video_vid" type="java.lang.String">
+            <column name="VIDEO_VID"/>
+        </property>
+        <property name="video_cid" type="java.lang.String">
+            <column name="VIDEO_CID"/>
+        </property>
+        <property name="video_url" type="java.lang.String">
+            <column name="VIDEO_URL"/>
+        </property>
+        <property name="video_pic" type="java.lang.String">
+            <column name="VIDEO_PIC"/>
+        </property>
+        <property name="video_title" type="java.lang.String">
+            <column name="VIDEO_TITLE"/>
+        </property>
     </class>
 </hibernate-mapping>
 

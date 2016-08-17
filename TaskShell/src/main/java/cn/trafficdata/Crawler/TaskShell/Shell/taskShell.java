@@ -23,7 +23,7 @@ public class taskShell {
     static {
         display=new Display();
         shell=new Shell(display);
-        shell.setSize(800,300);
+        shell.setSize(900,300);
         shell.setText("智库任务添加程序");
     }
 
@@ -31,34 +31,37 @@ public class taskShell {
         initView();
     }
     private static void initView(){
-        shell.setLayout(new GridLayout(10,true));
+        shell.setLayout(new GridLayout(20,true));
         GridData labelLayoutData=new GridData(SWT.FILL,SWT.FILL,true,false,1,1);
         GridData textLayoutData=new GridData(SWT.FILL,SWT.FILL,true,false,1,1);
-        Label label=new Label(shell,SWT.BORDER);
+        Label label=new Label(shell,SWT.NONE);
         label.setText("MySql链接");
         label.setLayoutData(labelLayoutData);
         final Text urlText=new Text(shell,SWT.BORDER);
-        urlText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,4,1));
-        label=new Label(shell,SWT.BORDER);
+        urlText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,false,14,1));
+        urlText.setText(DBUtils.url);
+        label=new Label(shell,SWT.NONE);
         label.setText("用户名");
         label.setLayoutData(labelLayoutData);
         final Text userNameText=new Text(shell,SWT.BORDER);
         userNameText.setLayoutData(textLayoutData);
-        label=new Label(shell,SWT.BORDER);
+        userNameText.setText(DBUtils.username);
+        label=new Label(shell,SWT.NONE);
         label.setText("密码");
         label.setLayoutData(labelLayoutData);
         final Text passWordText=new Text(shell,SWT.BORDER);
         passWordText.setLayoutData(textLayoutData);
+        passWordText.setText(DBUtils.password);
         final Button button=new Button(shell,SWT.BORDER);
         button.setLayoutData(textLayoutData);
-        button.setText("测试数据库");
+        button.setText("测试");
         button.addSelectionListener(new SelectionListener() {
             public void widgetSelected(SelectionEvent selectionEvent) {
                 boolean b = DBUtils.validDB(urlText.getText(), userNameText.getText(), passWordText.getText());
                 if(b){
-                    button.setText("测试通过");
+                    button.setText("OK");
                 }else{
-                    button.setText("测试不通过");
+                    button.setText("NO");
                 }
             }
 
@@ -67,9 +70,9 @@ public class taskShell {
             }
         });
         final Text taskText=new Text(shell,SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
-        taskText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,9,9));
+        taskText.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,19,19));
         Button insertButton=new Button(shell,SWT.BORDER);
-        insertButton.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,9));
+        insertButton.setLayoutData(new GridData(SWT.FILL,SWT.FILL,true,true,1,19));
         insertButton.setText("添加");
         insertButton.addSelectionListener(new SelectionListener() {
             public void widgetSelected(SelectionEvent selectionEvent) {
@@ -100,11 +103,11 @@ public class taskShell {
         Connection connection=null;
         try {
             connection=DBUtils.getConnection();
-            PreparedStatement ps=connection.prepareStatement("INSERT INTO tasktable VALUES (?,?,?)");
+            PreparedStatement ps=connection.prepareStatement("INSERT INTO tasktable VALUES (null,?,?)");
             connection.setAutoCommit(false);
             for(String url:tasks){
-                ps.setString(2,url);
-                ps.setInt(3,0);
+                ps.setString(1,url);
+                ps.setInt(2,0);
                 ps.addBatch();
             }
             ps.executeBatch();
