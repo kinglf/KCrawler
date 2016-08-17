@@ -15,60 +15,25 @@ import java.util.List;
 
 /**
  * Created by Kinglf on 2016/8/12.
+ * 修改
  */
-public class ZGJTB_Crawler extends DocumentUtils implements ProcessDao{
+public class ZGJTB_Crawler extends SuperCrawler{
 
-
-    public List<WebURL> pageListHandler(Page page) {
-        List<WebURL> webURLs=new ArrayList<WebURL>();
-        Document doc=page2Doc(page);
-        doc.setBaseUri(page.getWebURL().getURL());
-        try{
-            Elements linkEls=doc.select("div[class=p-list] ul[class=p-li-ul] li");
-            for(Element linkEl:linkEls){
-                String url=linkEl.select("a").attr("abs:href");
-                logger.info("发现新链接:{}",url);
-                try {
-                    WebURL webURL = new WebURL();
-                    webURL.setURL(url);
-                    webURL.setDepth((short) 1);
-                    webURLs.add(webURL);
-                }catch (Exception e){
-                    logger.error("url:{}error[{}]",url,e);
-                }
-            }
-        }catch (Exception e){
-            logger.error("列表页解析失败,{},{}",page.getWebURL().getURL(),e);
-            e.printStackTrace();
-        }
-        return webURLs;
+    protected Elements getLinkElements(Document doc) {
+       return doc.select("div[class=p-list] ul[class=p-li-ul] li");
     }
 
-    public boolean processDoc(Page page) {
-        Document doc=page2Doc(page);
-        News pluginNews=null;
-        try {
-            pluginNews= ContentExtractor.getNewsByDoc(doc);
-        } catch (Exception e) {
-            logger.error("ContentExtractor插件调用错误,页面url-{},错误-{}",page.getWebURL().getURL(),e);
-            return false;
-        }
-        LocalNews news=new LocalNews();
-        String title=pluginNews.getTitle();
-        String sourceAtime=doc.select("div[class=t-title] p").first().text();
-        news.setTitle(title);
-        news=formatSource(sourceAtime,news);
-        if(news.getDatetime()==null){
-            news.setDatetime(pluginNews.getTime());
-        }
-        Element imgElement=doc.select("div[class=m]").first();
-        imgElement=processImage(imgElement);
-        String content=formatContent(imgElement.html());
-        news.setContent(content);
-        news.setUrl(page.getWebURL().getURL());
-        saveResult(news);
-        System.out.println(news.toString());
+    protected LocalNews processVideo(LocalNews news, Document doc) {
+        return null;
+    }
 
-        return true;
+    protected Element getContentElement(Document doc) {
+        return doc.select("div[class=m]").first();
+    }
+
+    protected LocalNews processSources(LocalNews news, Document doc) {
+        String sourceAtime=doc.select("div[class=t-title] p").first().text();
+        news=formatSource(sourceAtime,news);
+        return news;
     }
 }

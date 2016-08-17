@@ -23,7 +23,7 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
             doc.setBaseUri(page.getWebURL().getURL());
             try {
                 //抽象方法获得链接
-                Elements linkEls=getLinkElements();
+                Elements linkEls=getLinkElements(doc);
                 for (Element linkEl : linkEls) {
                     String url = linkEl.attr("abs:href");
                     logger.info("发现新链接:{}", url);
@@ -78,6 +78,11 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
             logger.info("数据获取成功,{}", news.toString());
             return true;
         }
+    /**
+     * 列表页处理链接用
+     * @return
+     */
+    protected abstract Elements getLinkElements(Document doc);
 
     /**
      *  获得视频标签
@@ -102,11 +107,6 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
      */
     protected abstract LocalNews processSources(LocalNews news, Document doc);
 
-    /**
-     * 列表页处理链接用
-     * @return
-     */
-    protected abstract Elements getLinkElements();
 
 }
 

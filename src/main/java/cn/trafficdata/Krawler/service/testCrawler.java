@@ -9,6 +9,11 @@ import org.jsoup.select.Elements;
  * Created by Kinglf on 2016/8/17.
  */
 public class testCrawler extends SuperCrawler {
+
+    protected Elements getLinkElements(Document doc) {
+        return null;
+    }
+
     protected LocalNews processVideo(LocalNews news, Document doc) {
         return null;
     }
@@ -21,7 +26,4 @@ public class testCrawler extends SuperCrawler {
         return null;
     }
 
-    protected Elements getLinkElements() {
-        return null;
-    }
 }

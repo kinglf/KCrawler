@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Created by Kinglf on 2016/8/17.
+ * 未修改
  */
 public class BBAQW_Crawler extends DocumentUtils implements ProcessDao {
     public List<WebURL> pageListHandler(Page page) {

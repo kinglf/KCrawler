@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by Kinglf on 2016/8/17.
  * 图片类新闻未处理
+ * 未修改-原因同上
  */
 public class QQ_Crawler extends DocumentUtils implements ProcessDao{
     public List<WebURL> pageListHandler(Page page) {
