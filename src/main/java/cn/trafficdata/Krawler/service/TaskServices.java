@@ -21,7 +21,7 @@ public class TaskServices {
         } catch (SQLException e) {
             return null;
         }
-        PreparedStatement ps = connection.prepareStatement("SELECT url FROM tasktable WHERE flag=0");
+        PreparedStatement ps = connection.prepareStatement("SELECT url FROM tasktable WHERE flag=3");
         ResultSet resultSet = ps.executeQuery();
         while (resultSet.next()) {
             String url = resultSet.getString(1);

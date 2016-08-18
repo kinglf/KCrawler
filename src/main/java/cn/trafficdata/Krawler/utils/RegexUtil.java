@@ -15,7 +15,7 @@ public class RegexUtil {
 
     private final static String regxpForImaTagSrcAttrib = "src=\"([^\"]+)\""; // 找出IMG标签的SRC属性
 
-    private final static String regexDate="\\d{4}-\\d{2}-\\d{2}";
+    private final static String regexDate="\\d{4}-\\d{1,2}-\\d{2}";
 
     /**
      *

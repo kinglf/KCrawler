@@ -30,7 +30,7 @@ public class JiaoTongJie_Crawler extends SuperCrawler {
     }
 
     protected Element getContentElement(Document doc) {
-        return null;
+        return doc.select("div[class=wb_nr]").first();
     }
 
     protected LocalNews processSources(LocalNews news, Document doc) {

@@ -3,6 +3,7 @@ package cn.trafficdata.Krawler.service;
 import cn.trafficdata.Krawler.constants.CrawlerConstants;
 import cn.trafficdata.Krawler.utils.DBUtil;
 import cn.trafficdata.Krawler.utils.DocumentUtils;
+import cn.trafficdata.Krawler.utils.FileUtils;
 import com.google.common.io.Files;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.crawler.Page;
@@ -88,7 +89,12 @@ public class BaseCrawler extends WebCrawler {
         }
         if(page.getParseData() instanceof HtmlParseData){
         int detph=page.getWebURL().getDepth();
-        String className="cn.trafficdata.Krawler.service."+CrawlerConstants.SITE_MAP.get(page.getWebURL().getDomain());
+            String className=null;
+            if (page.getWebURL().getURL().contains("http://epaper.zgsyb.com")){
+                className="cn.trafficdata.Krawler.service.EPAGER_ZGSYB_Crawler";
+            }else{
+                className="cn.trafficdata.Krawler.service."+CrawlerConstants.SITE_MAP.get(page.getWebURL().getDomain());
+            }
         ProcessDao processer=null;
         try {
             processer= (ProcessDao) Class.forName(className).newInstance();
@@ -132,8 +138,11 @@ public class BaseCrawler extends WebCrawler {
                 try {
                     Files.write(page.getContentData(), imgFile);
                     logger.info("下载图片: [{}]===>[{}]", url,filename);
+                    FileUtils.appendFile(CrawlerConstants.IMAGE_LOG_FILE,"[SUCCESS][{"+url+"}]====>[{"+filename+"}]"+"\r\n");//记录图片下载
+
                 } catch (IOException iox) {
-                    logger.error("写[{}]===>[{}]文件失败: {}" ,filename, iox);
+                    logger.error("写[{}]===>[{}]文件失败: {}" ,url,filename, iox);
+                    FileUtils.appendFile(CrawlerConstants.IMAGE_LOG_FILE,"[FAILD][{"+url+"}]====>[{"+filename+"}]"+"\r\n");//记录图片下载
                 }
             }
         }else{

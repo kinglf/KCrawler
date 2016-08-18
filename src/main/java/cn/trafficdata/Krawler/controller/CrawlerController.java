@@ -80,7 +80,7 @@ public class CrawlerController {
     * 加载任务
     * */
     private static void loadTasks(CrawlController controller){
-        controller.addSeed("http://www.moc.gov.cn/jiaotongyaowen/",-1);
+//        controller.addSeed("http://www.moc.gov.cn/jiaotongyaowen/",-1);
 //        controller.addSeed("http://www.zgjtb.com/node_142.htm",-1);
 //        controller.addSeed("http://www.jiaotongjie.com/hotnews/index_12.html",-1);
 //        controller.addSeed("http://money.163.com/special/002526O5/transport.html",-1);
@@ -99,16 +99,17 @@ public class CrawlerController {
 //        for(String link:links){
 //            controller.addSeed(link,-1);
 //        }
-//        try {
-//            List<String> taskList = TaskServices.loadTasks();
-//            for(String task:taskList){
-//                controller.addSeed(task,-1);
-//                logger.info("系统得到任务并装载{}",task);
-//                //暂未对任务进行标记
-//            }
-//        } catch (SQLException e) {
-//            logger.error("数据库连接错误{}",e);
-//        }
+
+        try {
+            List<String> taskList = TaskServices.loadTasks();
+            for(String task:taskList){
+                controller.addSeed(task,-1);
+                logger.info("系统得到任务并装载{}",task);
+                //暂未对任务进行标记
+            }
+        } catch (SQLException e) {
+            logger.error("数据库连接错误{}",e);
+        }
 
     }
 
@@ -127,8 +128,9 @@ public class CrawlerController {
         config.setUserAgentString(CrawlerConstants.USERAGNET);
         config.setMaxOutgoingLinksToFollow(maxOutgoingLinksToFollow);
         config.setFollowRedirects(true);
-        config.setPolitenessDelay(1000);
+        config.setPolitenessDelay(500);
         config.setIncludeBinaryContentInCrawling(true);//图片下载
+        config.setMaxDownloadSize(1048576*5); //最大范围5M
         PageFetcher pageFetcher=new PageFetcher(config);
         RobotstxtConfig robotstxtConfig=new RobotstxtConfig();
         robotstxtConfig.setEnabled(false);

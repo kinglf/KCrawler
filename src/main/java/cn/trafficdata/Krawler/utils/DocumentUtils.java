@@ -177,17 +177,17 @@ public class DocumentUtils {
         String time=null;
         String author=null;
         for(String str:arr){
-            if(str.contains(shijian)){
-                time= RegexUtil.filterDate(str);
+            if(str.contains(zuozhe)){
+                author=str.replace(zuozhe,"").replace("：","").replace(":","");
             }else if(str.contains(laiyuan)){
-                source=str.replace(laiyuan,"").replace("：","");
-            }else if(str.contains(zuozhe)){
-                author=str.replace(zuozhe,"").replace("：","");
+                source=str.replace(laiyuan,"").replace("：","").replace(":","");
+            }else if(str.contains(shijian)){
+                time= RegexUtil.filterDate(str);
             }
         }
         news.setDatetime(time);
-        news.setSource(source);
-        news.setAuthor(author);
+        news.setSource(source.trim());
+        news.setAuthor(author.trim());
         return news;
     }
 

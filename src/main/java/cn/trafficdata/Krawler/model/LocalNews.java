@@ -53,6 +53,15 @@ public class LocalNews implements Serializable{
     private String jianjie;//简介
     private String key;//关键词以,号分割
 
+    private String video_type;//用来判断哪的视频
+    private String video_vid;//vid
+    private String video_cid;
+    private String video_url;
+    private String video_pic;
+    private String video_title;
+
+
+
     public String getVideo_type() {
         return video_type;
     }
@@ -100,13 +109,6 @@ public class LocalNews implements Serializable{
     public void setVideo_title(String video_title) {
         this.video_title = video_title;
     }
-
-    private String video_type;//用来判断哪的视频
-    private String video_vid;//vid
-    private String video_cid;
-    private String video_url;
-    private String video_pic;
-    private String video_title;
 
 
     public static long getSerialVersionUID() {

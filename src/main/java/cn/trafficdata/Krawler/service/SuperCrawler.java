@@ -5,6 +5,7 @@ import cn.edu.hfut.dmic.contentextractor.News;
 import cn.trafficdata.Krawler.model.LocalNews;
 import cn.trafficdata.Krawler.utils.DocumentUtils;
 import edu.uci.ics.crawler4j.crawler.Page;
+import edu.uci.ics.crawler4j.parser.HtmlParseData;
 import edu.uci.ics.crawler4j.url.WebURL;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -24,15 +25,17 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
                 //抽象方法获得链接
                 Elements linkEls=getLinkElements(doc);
                 for (Element linkEl : linkEls) {
-                    String url = linkEl.select("a").attr("abs:href");
-                    logger.info("发现新链接:{}", url);
-                    try {
-                        WebURL webURL = new WebURL();
-                        webURL.setURL(url);
-                        webURL.setDepth((short) 1);
-                        webURLs.add(webURL);
-                    } catch (Exception e) {
-                        logger.error("error[{}]", url);
+                    String url = linkEl.select("a").first().attr("abs:href");
+                    if(url!=null) {
+                        logger.info("发现新链接:{}", url);
+                        try {
+                            WebURL webURL = new WebURL();
+                            webURL.setURL(url);
+                            webURL.setDepth((short) 1);
+                            webURLs.add(webURL);
+                        } catch (Exception e) {
+                            logger.error("error[{}]", url);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -56,7 +59,12 @@ public abstract class SuperCrawler extends DocumentUtils implements ProcessDao{
             //抽象方法填充资源,包括时间,作者,引用或转自
             news=processSources(news,doc);
             if(news.getTitle()==null){
-                news.setTitle(pluginNews.getTitle());
+                String title=pluginNews.getTitle();
+                if(title==null){
+                    news.setTitle(doc.title());
+                }else {
+                    news.setTitle(title);
+                }
             }
             if (news.getDatetime() == null) {
                 news.setDatetime(pluginNews.getTime());
