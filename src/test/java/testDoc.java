@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class testDoc {
     public static void main(String[] args) {
-        Document doc= BaseCrawler.getDoc("http://www.chinawuliu.com.cn/zixun/201608/18/314494.shtml",true,15000);
-        Elements select =doc.select("div[class=wzlb_con_left_table] li");
+        Document doc= BaseCrawler.getDoc("http://www.china-its.org/cnt_list_2_2.html",true,15000);
+        Elements select =doc.select("table.tab_list>tbody>tr>td[align=left]");
         int i=0;
         for(Element el:select){
             System.out.println(el.select("a"));
@@ -28,7 +28,7 @@ public class testDoc {
         System.out.println(i);
 
         //
-        System.out.println(doc.select("div[class=main1_L6] dd").first().text());
+//        System.out.println(doc.select("div[class=main1_L6] dd").first().text());
 
         //
 //        Element docEl = doc.select("div[class=new-detailed-cont]").first();

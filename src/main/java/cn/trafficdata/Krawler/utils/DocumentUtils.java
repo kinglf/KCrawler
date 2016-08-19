@@ -185,9 +185,14 @@ public class DocumentUtils {
                 time= RegexUtil.filterDate(str);
             }
         }
+
         news.setDatetime(time);
-        news.setSource(source.trim());
-        news.setAuthor(author.trim());
+        if(source!=null){
+            news.setSource(source.trim());
+        }
+        if(author!=null){
+            news.setAuthor(author.trim());
+        }
         return news;
     }
 

@@ -107,7 +107,7 @@ public class taskShell {
             connection.setAutoCommit(false);
             for(String url:tasks){
                 ps.setString(1,url);
-                ps.setInt(2,0);
+                ps.setInt(2,3);
                 ps.addBatch();
             }
             ps.executeBatch();
