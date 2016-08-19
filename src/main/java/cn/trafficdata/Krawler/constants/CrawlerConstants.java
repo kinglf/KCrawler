@@ -65,7 +65,7 @@ public class CrawlerConstants {
         SITE_MAP.put("cnair.com","CNAIR_Crawler");
         SITE_MAP.put("yunquna.com","YUNQUNA_Crawler");
         SITE_MAP.put("china-its.org","CHINA_ITS_Crawler");
-        SITE_MAP.put("66its.com","66ITS_Crawler");//到这了
+        SITE_MAP.put("66its.com","_66ITS_Crawler");
         SITE_MAP.put("itsc.cn","ITSC_Crawler");
         SITE_MAP.put("mot.gov.cn","MOT_GOV_Crawler");
         SITE_MAP.put("mte.net.cn","MTE_Crawler");
