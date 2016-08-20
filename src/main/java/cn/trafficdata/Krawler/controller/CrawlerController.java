@@ -26,7 +26,6 @@ import java.util.List;
  * Created by Kinglf on 2016/8/12.
  */
 public class CrawlerController {
-    public static String isDoingName="综合新闻";
     private static Logger logger= LoggerFactory.getLogger(CrawlerController.class);
     public static CrawlController controller;
     public static void main(String[] args) {
@@ -89,7 +88,6 @@ public class CrawlerController {
 //        controller.addSeed("http://auto.qq.com/l/service/trafficnews/list.htm",-1);
 //        controller.addSeed("http://auto.sohu.com/qichejiaotong/index.shtml",-1);
 //        controller.addSeed("http://news.c-cc.cn/new_news.asp?classid=0&Page=1",-1);
-        isDoingName="综合新闻";
 //        controller.addSeed("http://www.bbaqw.com/wzs/jtaq/jtrd.htm");
 //        controller.addSeed("http://www.chinarta.com/News/kTraffic/index.asp?page=1",-1);
 //        controller.addSeed("http://news.china.com/baike_5Lqk6YCa.html",-1);
@@ -129,6 +127,7 @@ public class CrawlerController {
         config.setMaxOutgoingLinksToFollow(maxOutgoingLinksToFollow);
         config.setFollowRedirects(true);
         config.setPolitenessDelay(500);
+        config.setConnectionTimeout(20000);
         config.setIncludeBinaryContentInCrawling(true);//图片下载
         config.setMaxDownloadSize(1048576*5); //最大范围5M
         PageFetcher pageFetcher=new PageFetcher(config);

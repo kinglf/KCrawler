@@ -94,7 +94,7 @@ public class DocumentUtils {
         try{
             session=HibernateUtil.getSession();
             session.beginTransaction();
-            news.setFenlei(CrawlerController.isDoingName);
+            news.setFenlei(CrawlerConstants.FENLEISTR);
             session.save(news);
             session.getTransaction().commit();
         }catch (HibernateException e){

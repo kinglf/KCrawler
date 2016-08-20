@@ -19,6 +19,9 @@ public class CrawlerConstants {
     public static final String IMAGE_LOG_FILE="data/crawl/image/log.txt";
     public static final String RESULT_TABLE_NAME="newsResult";
     public static final String TASK_TABLE_NAME="tasktable";
+    //diy
+    public static final int FENLEI=4;
+    public static final String FENLEISTR="铁路";
 
     static{
         SITE_MAP.put("zgjtb.com","ZGJTB_Crawler");

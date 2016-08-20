@@ -1,5 +1,6 @@
 package cn.trafficdata.Krawler.service;
 
+import cn.trafficdata.Krawler.constants.CrawlerConstants;
 import cn.trafficdata.Krawler.utils.DBUtil;
 
 import java.sql.Connection;
@@ -21,7 +22,7 @@ public class TaskServices {
         } catch (SQLException e) {
             return null;
         }
-        PreparedStatement ps = connection.prepareStatement("SELECT url FROM tasktable WHERE flag=1");
+        PreparedStatement ps = connection.prepareStatement("SELECT url FROM tasktable WHERE flag="+ CrawlerConstants.FENLEI);
         ResultSet resultSet = ps.executeQuery();
         while (resultSet.next()) {
             String url = resultSet.getString(1);
