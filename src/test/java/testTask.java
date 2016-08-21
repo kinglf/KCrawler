@@ -3,8 +3,8 @@
  */
 public class testTask {
     public static void main(String[] args) {
-        String baseUrl="http://www.chinaports.org/list/1003_1028_$.htm";
-        for(int i=1;i<=94;i++){
+        String baseUrl="http://www.its114.com/html/news/guojiqianyan/$.html";
+        for(int i=2;i<=11;i++){
             System.out.println(baseUrl.replace("$",i+""));
         }
     }

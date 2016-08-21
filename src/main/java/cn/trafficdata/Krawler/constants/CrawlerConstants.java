@@ -20,14 +20,14 @@ public class CrawlerConstants {
     public static final String RESULT_TABLE_NAME="newsResult";
     public static final String TASK_TABLE_NAME="tasktable";
     //diy
-    public static final int FENLEI=4;
-    public static final String FENLEISTR="铁路";
+    public static final int FENLEI=7;
+    public static final String FENLEISTR="综合";
 
     static{
         SITE_MAP.put("zgjtb.com","ZGJTB_Crawler");
         SITE_MAP.put("jiaotongjie.com","JiaoTongJie_Crawler");
         SITE_MAP.put("moc.gov.cn","MOC_Crawler");
-        SITE_MAP.put("163.com","WANGYI163_Crawler");
+        SITE_MAP.put("163.com","_163_Crawler");
         SITE_MAP.put("jiemian.com","JMA_Crawler");
         SITE_MAP.put("qq.com","QQ_Crawler");
         SITE_MAP.put("sohu.com","SOHU_Crawler");

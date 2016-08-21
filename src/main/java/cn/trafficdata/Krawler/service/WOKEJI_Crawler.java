@@ -10,6 +10,9 @@ import org.jsoup.select.Elements;
  */
 public class WOKEJI_Crawler extends SuperCrawler {
     protected Elements getLinkElements(Document doc) {
+        if(doc.baseUri().contains("qyts")){
+            doc.select("div.box1_l_main ul li span a");
+        }
         return doc.select("div.box2title>a");
     }
 
