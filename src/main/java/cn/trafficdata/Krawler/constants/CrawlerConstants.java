@@ -77,7 +77,7 @@ public class CrawlerConstants {
         SITE_MAP.put("cannews","CANNEWS_Crawler");
         SITE_MAP.put("chinametro.net","CHINAMETRO_Crawler");
         SITE_MAP.put("zgcsgd.com","ZGCSGD_Crawler");
-        SITE_MAP.put("firect.com","FIRECT_Crawler");
+        SITE_MAP.put("firetc.com","FIRECT_Crawler");
         SITE_MAP.put("wokeji.com","WOKEJI_Crawler");
         SITE_MAP.put("toutiao.com","TOUTIAO_Crawler");
         SITE_MAP.put("cjtkj.com","CJTKJ_Crawler");
