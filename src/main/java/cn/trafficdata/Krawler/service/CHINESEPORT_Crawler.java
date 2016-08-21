@@ -19,7 +19,15 @@ public class CHINESEPORT_Crawler extends SuperCrawler {
     }
 
     protected Element getContentElement(Document doc) {
-        return doc.select("table[class=content]").first();
+        Element docEl=doc.select("table[class=content]").first();
+
+        Elements delELs=docEl.select("div[class=xtkchineseport.cnpfl]");
+        for(Element delEl:delELs){
+            if(delEl.html().contains("浏览器版本过低")){
+                delEl.remove();
+            }
+        }
+        return docEl;
     }
 
     protected LocalNews processSources(LocalNews news, Document doc) {
