@@ -21,7 +21,7 @@ public class CHINESEPORT_Crawler extends SuperCrawler {
     protected Element getContentElement(Document doc) {
         Element docEl=doc.select("table[class=content]").first();
 
-        Elements delELs=docEl.select("div[class=xtkchineseport.cnpfl]");
+        Elements delELs=docEl.select("div");
         for(Element delEl:delELs){
             if(delEl.html().contains("浏览器版本过低")){
                 delEl.remove();

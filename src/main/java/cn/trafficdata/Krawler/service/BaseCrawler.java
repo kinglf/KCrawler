@@ -118,7 +118,7 @@ public class BaseCrawler extends WebCrawler {
                     break;
             }
         } catch (ClassNotFoundException e) {
-            logger.error("没有找到对应的类Class-{}",className);
+            logger.error("没有找到对应的类Class-{}",page.getWebURL().getDomain());
         } catch (InstantiationException e) {
             logger.error("{}",e);
         } catch (IllegalAccessException e) {
